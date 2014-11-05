@@ -1,0 +1,73 @@
+<div class="container container-fluid">
+	<div class="row">
+		<form>
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>General data</h3>
+					<div class="text-center"  flow-init="{target: 'http://api.angular.com:8080/api/upload'}"
+							 flow-files-submitted="$flow.upload();"
+							 flow-file-success="fileUploaded($message)">
+						<div>							
+							<span ng-if="tornament.photo">
+								<img width="100" height="100" ng-src="/images/{{tornament.photo}}" class="img-circle" />
+							</span>
+							<span ng-if="!tornament.photo">
+								<span class="fa fa-trophy" style="font-size: 100px;"></span>
+							</span>
+						</div>
+						<div>
+
+ 						    <label for="fusk" class="btn btn-success">Change image</label>
+						    <input type="file" id="fusk" flow-btn style="display: none;" on name="displayImage"/>
+
+							<a class="btn btn-warning"  ng-click="tornament.photo = ''">Clear image</a>	
+
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="title">Title</label>
+					<input class="form-control" id="title" placeholder="Enter title" ng-model="tornament.title">
+					<label for="description">Description</label>
+					<input class="form-control" id="description" placeholder="Enter description" ng-model="tornament.description">
+					<label for="type">Type</label>
+					<select class="form-control" id="type" ng-model="tornament.type" ng-options="type.id as type.type for type in types"></select>
+					<label for="startDate">Start date</label>
+					<input type="text" class="form-control" datepicker-popup="dd MMM yyyy HH:mm" ng-model="tornament.startDate" is-open="startOpened" ng-click="startOpened = true" close-text="Close" />
+					<label for="registrationTillDate">Registration till date</label>
+					<input type="text" class="form-control" datepicker-popup="dd MMM yyyy  HH:mm" ng-model="tornament.registrationTillDate" is-open="registrationTillOpened" ng-click="registrationTillOpened = true" close-text="Close" />
+					<label for="inscriptionDate">Inscription date</label>
+					<input type="text" class="form-control" datepicker-popup="dd MMM yyyy  HH:mm" ng-model="tornament.inscriptionDate" is-open="inscriptionOpened" ng-click="inscriptionOpened = true" close-text="Close" />
+					<label for="price">Price</label>
+					<input class="form-control" id="price" placeholder="Enter price" ng-model="tornament.price">
+					<label for="currency">Currency</label>
+					<input class="form-control" id="currency" placeholder="Enter currency" ng-model="tornament.currency">
+					<label for="prize">Prize</label>
+					<input class="form-control" id="prize" placeholder="Enter prize" ng-model="tornament.prize">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<span ng-if="tornament._id != new">
+			<button ng-click="tornamentDelete()" class="btn btn-danger">Delete</button>
+			<a href="#/tornament/{{tornament._id}}" class="btn btn-default">Cancel</a>
+			</span>
+			<a href="#/tornament" class="btn btn-default">Back</a>
+			<button ng-click="tornamentSave()" class="btn btn-success">Save</button>
+		</div>
+	</div>
+	
+	<span ng-if="tornament._id != new">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>Tornament results</h3>
+					<button ng-click="addTornament()" class="btn btn-success">add</button>
+				</div>
+			</div>
+		</div>
+	</span>
+	
+</div>

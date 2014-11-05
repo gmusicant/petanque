@@ -1,0 +1,85 @@
+<div class="container container-fluid">
+	<div class="row">
+		<form>
+			<div class="col-md-8">
+				<div class="form-group">
+					<h3>Club data</h3>
+					<div class="text-center"  flow-init="{target: 'http://api.angular.com:8080/api/upload'}"
+							 flow-files-submitted="$flow.upload();"
+							 flow-file-success="fileUploaded($message)">
+						<div>
+							<span ng-if="club.photo">
+								<img width="100" height="100" ng-src="/images/{{club.photo}}" class="img-circle" />
+							</span>
+							<span ng-if="!club.photo">
+								<span class="fa fa-users" style="font-size: 100px;"></span>
+							</span>
+						</div>
+						<div>
+						
+							<label for="fusk" class="btn btn-success">Change image</label>
+							<input type="file" id="fusk" flow-btn style="display: none;" on name="displayImage"/>
+								
+							<a class="btn btn-warning" ng-click="club.photo = ''">Clear image</a>
+						
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="title">Name</label>
+					<input class="form-control" id="title" placeholder="Enter name" ng-model="club.title">
+					<label for="city">City</label>
+					<input class="form-control" id="city" placeholder="Enter city" ng-model="club.city">
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-8">
+			<span ng-if="club._id != new">
+			<button ng-click="clubDelete()" class="btn btn-danger">Delete</button>
+			<a href="#/club/{{club._id}}" class="btn btn-default">Cancel</a>
+			</span>
+			<a href="#/club" class="btn btn-default">Back</a>
+			<button ng-click="clubSave()" class="btn btn-success">Save</button>
+		</div>
+	</div>
+	
+	<span ng-if="club._id != new">
+		<div class="row">
+			<h3>Members: <a class="btn btn-success" ng-click="isMembersCollapsed = !isMembersCollapsed"><span ng-if="isMembersCollapsed">Hide</span><span ng-if="!isMembersCollapsed">Show</span></a></h3>
+			<div class="col-md-2" collapse="!isMembersCollapsed">
+				<label for="searchText">Select user to add:</label>
+				<angucomplete-alt id="ex1"
+					  placeholder="Add user"
+					  pause="100"
+					  selected-object="addToClub"
+					  local-data="users"
+					  search-fields="firstName"
+					  title-field="firstName"
+					  minlength="1"
+					  input-class="form-control form-control-small"/>
+			</div>
+			<div class="col-md-2" collapse="!isMembersCollapsed">
+				<label for="searchText">Filter:</label>
+				<input placeholder="Filter" id="searchText" class="form-control" ng-model="searchText">
+			</div>
+
+		</div>
+		<div class="row" collapse="!isMembersCollapsed">
+			<div class="col-md-2 text-center test-class" ng-repeat="user in clubUsers | filter:searchText">
+				<div>
+					<span ng-if="user.photo">
+						<img width="100" height="100" ng-src="/images/{{user.photo}}" class="img-circle" />
+					</span>
+					<span ng-if="!user.photo">
+						<span class="fa fa-user" style="font-size: 50px;"></span>
+					</span>
+				</div>
+				{{user.firstName}} {{user.lastName}}
+				<div><button ng-click="removeFromClub(user)" class="btn btn-danger">Delete</button></div>
+			</div>
+		</div>
+	</span>	
+</div>

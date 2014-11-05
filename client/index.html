@@ -1,0 +1,187 @@
+<html ng-app="petanqueApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Petanque UA</title>
+    
+    <script src="/js/md5.js"></script>
+    
+    <!-- jquery -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <!-- angular -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
+    <!-- angular modules -->
+    <script type="text/javascript" src="js/modules/angucomplete-alt.js"></script>
+    <script type="text/javascript" src="js/modules/ui-bootstrap-tpls-0.11.2.min.js"></script>
+    <script type="text/javascript" src="js/modules/ng-flow-standalone.js"></script>
+    
+    <!-- booststrap -->
+	<!--   Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<!--   Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<!--   Latest compiled and minified JavaScript -->
+	
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+	
+	<!-- additional icons -->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	
+	<script src="js/app/controllers/autorisationControllers.js"></script>
+	<script src="js/app/controllers/userControllers.js"></script>
+	<script src="js/app/controllers/clubControllers.js"></script>
+	<script src="js/app/controllers/tornamentControllers.js"></script>
+	
+	<script src="js/app/factories/userFactory.js"></script>
+	<script src="js/app/factories/clubFactory.js"></script>
+	<script src="js/app/factories/tornamentFactory.js"></script>
+	
+	<script src="js/app/app.js"></script>
+
+    <script>
+       
+      
+      function errorHendler(data) {
+		  
+		if (typeof data.errors != "undefinded") {
+						
+			for(error in data.errors) {
+				
+				alert(data.errors[error].message);
+				return false;
+				
+			}
+			
+		}
+		
+		return true;
+				  
+	  }
+      
+      function addActive(hash) {
+		  $(".nav a[rel=" + hash + "]").parent().addClass('active');
+	  }
+      
+      function updateActiveNav() {
+		  		
+		$(".nav a").parent().removeClass('active'); 
+		
+		var hash = location.hash.substr(2);
+
+		var _ref = hash.split('/');
+		var token = '';
+		
+		if (_ref.length == 1 && _ref[0] == "")
+			_ref[0] = "user";
+		
+		for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+			
+			if (token)
+				token = token + '_' + _ref[_i];
+			else 
+				token = _ref[_i];
+				
+			if (token)
+				addActive(token);
+			
+		}
+		  
+	  }
+      
+      jQuery(document).ready(function($){
+			updateActiveNav();			
+	  });
+
+    </script> 
+    
+    <style>
+    
+    html {
+	  position: relative;
+	  min-height: 100%;
+	}
+	body {
+	  /* Margin bottom by footer height */
+	  margin-bottom: 60px;
+	}
+	.footer {
+	  position: absolute;
+	  bottom: 0;
+	  width: 100%;
+	  /* Set the fixed height of the footer here */
+	  height: 60px;
+	  background-color: #f5f5f5;
+	}
+
+
+	/* Custom page CSS
+	-------------------------------------------------- */
+	/* Not required for template or sticky footer method. */
+
+	body > .container {
+	  padding: 60px 15px 0;
+	}
+	.container .text-muted {
+	  margin: 20px 0;
+	}
+
+	.footer > .container {
+	  padding-right: 15px;
+	  padding-left: 15px;
+	}
+
+	code {
+	  font-size: 80%;
+	}
+
+
+    </style>  
+  </head>
+  <body>
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Petanque UA</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active" ><a href="#/user" rel="user"><span class="fa fa-user"></span> Players</a></li>
+              <li><a href="#/club" rel="club"><span class="fa fa-users"></span> Clubs</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" rel="tornament" data-toggle="dropdown"><span class="fa fa-trophy"></span>  Tornaments<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#/tornament"><span class="fa fa-list-ul"></span> List</a></li>
+                  <li><a href="#"><span class="fa fa-bar-chart"></span> Results</a></li>
+                  <li><a href="#"><span class="fa fa-calendar"></span> Calendar</a></li>
+                </ul>
+              </li>
+            </ul>
+            <span ng-if="!currentUser.session">
+				<ul class="nav navbar-nav navbar-right" >
+				  <li class="active"><a href="#/autorisation/login" ng-click="preLogin()"><span class="fa fa-sign-in"></span> Log in</a></li>
+				  <li><a href="#/autorisation/login"><span class="fa fa-sign-out"></span> Registration</a></li>
+				  <li><a href="./"><span class="fa fa-question-circle"></span> Help</a></li>
+				</ul>
+            </span>
+            <span ng-if="currentUser.session">
+				<ul class="nav navbar-nav navbar-right">
+				  <li><a ng-click="logOut()"><span class="fa fa-sign-out"></span> Log out</a></li>
+				  <li><a href="./"><span class="fa fa-question-circle"></span> Help</a></li>
+				</ul>
+            </span>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </div>
+    <div ng-view></div>
+	<footer class="footer">
+		<div class="container text-center">
+			<div class="text-muted">
+				Provided by Anton Popov
+			</div>
+		</div>
+	</footer>    
+  </body>
+</html>

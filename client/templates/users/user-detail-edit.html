@@ -1,0 +1,111 @@
+<div class="container container-fluid">
+	<div class="row">
+		<form>
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>Personal data</h3>
+					<div class="text-center"  flow-init="{target: 'http://api.angular.com:8080/api/upload'}"
+							 flow-files-submitted="$flow.upload();"
+							 flow-file-success="fileUploaded($message)">
+						<div>							
+							<span ng-if="user.photo">
+								<img width="100" height="100" ng-src="/images/{{user.photo}}" class="img-circle" />
+							</span>
+							<span ng-if="!user.photo">
+								<span class="fa fa-user" style="font-size: 100px;"></span>
+							</span>
+						</div>
+						<div>
+
+ 						    <label for="fusk" class="btn btn-success">Change image</label>
+						    <input type="file" id="fusk" flow-btn style="display: none;" on name="displayImage"/>
+
+							<a class="btn btn-warning"  ng-click="user.photo = ''">Clear image</a>	
+
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="firstName">First name</label>
+					<input class="form-control" id="firstName" placeholder="Enter first name" ng-model="user.firstName">
+					<label for="lastName">Last name</label>
+					<input class="form-control" id="lastName" placeholder="Enter last name" ng-model="user.lastName">
+					<label for="username">Username</label>
+					<input class="form-control" id="username" placeholder="Enter username" ng-model="user.username">
+					<label for="gender">Gender</label>
+					<select class="form-control" id="gender" ng-model="user.gender" ng-options="gender.id as gender.gender for gender in genders"></select>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>Registration</h3>
+					<label for="registrationId">Registration ID</label>
+					<input class="form-control" id="registrationId" placeholder="Enter registrationId" ng-model="user.registrationId">
+					<label for="registrationStartAt">Registration start date:</label>
+					<input type="text" class="form-control" datepicker-popup="dd MMM yyyy" ng-model="user.registrationStartAt" is-open="startOpened" ng-click="startOpened = true" close-text="Close" />
+					<label for="registrationExpireAt">Registration end date</label>
+					<input type="text" class="form-control" datepicker-popup="dd MMM yyyy" ng-model="user.registrationExpireAt" min-date="user.registrationStartAt+1" is-open="endOpened" ng-click="endOpened = true" close-text="Close" />
+				</div>
+			</div>
+				<span ng-if="user._id != new">
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>Club</h3>
+					
+						<div class="text-center">
+							<span ng-if="club.photo">
+								<img width="100" height="100"/>
+							</span>
+							<span ng-if="!club.photo">
+								<span class="fa fa-users" style="font-size: 100px;"></span>
+							</span>
+						</div>
+						<dl class="dl-horizontal">
+							<dt><label>Club name</label></dt>
+							<dd>{{club.title}}</dd>
+							<dt>Club city</dt>
+							<dd>{{club.city}}</dd>
+						</dl>
+						
+					
+						<label>Add/Change club</label>
+						<angucomplete-alt id="ex2"
+							placeholder="Search clubs"
+							pause="100"
+							selected-object="changeClub"
+							local-data="clubs"
+							search-fields="title"
+							title-field="title"
+							description-field="city"
+							image-field="photo"
+							minlength="1"
+							input-class="form-control form-control-small"/>
+
+				</div>
+			</div>
+				</span>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<span ng-if="user._id != new">
+			<button ng-click="userDelete()" class="btn btn-danger">Delete</button>
+			<a href="#/user/{{user._id}}" class="btn btn-default">Cancel</a>
+			</span>
+			<a href="#/" class="btn btn-default">Back</a>
+			<button ng-click="userSave()" class="btn btn-success">Save</button>
+		</div>
+	</div>
+	
+	<span ng-if="user._id != new">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>Tornament results</h3>
+					<button ng-click="addTornament()" class="btn btn-success">add</button>
+				</div>
+			</div>
+		</div>
+	</span>
+	
+</div>

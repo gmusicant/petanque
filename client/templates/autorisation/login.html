@@ -1,0 +1,21 @@
+<div class="container container-fluid">
+	<div class="row">
+		<form>
+			<div class="col-md-4">
+				<div class="form-group">
+					<h3>Login information</h3>
+					<label for="username">Username</label>
+					<input class="form-control" id="username" placeholder="Enter username" ng-model="currentUser.username">
+					<label for="passworkd">Password</label>
+					<input class="form-control" id="password" type="password" placeholder="Enter password" ng-model="currentUser.password">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<a href="#/" class="btn btn-default">Back</a>
+			<button ng-click="loginUser()" class="btn btn-success">Login</button>
+		</div>
+	</div>
+</div>

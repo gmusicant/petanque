@@ -1,0 +1,53 @@
+<div class="container container-fluid">
+	<h1>{{club.title}} </h1>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="text-center">
+				<div>
+					<span ng-if="club.photo">
+						<img width="100" height="100" ng-src="/images/{{club.photo}}" class="img-circle" />
+					</span>
+					<span ng-if="!club.photo">
+						<span class="fa fa-users" style="font-size: 100px;"></span>
+					</span>
+				</div>
+			</div>
+			<dl class="dl-horizontal">
+				<dt><label>Name</label></dt>
+				<dd>{{club.title}}</dd>
+				<dt><label>City</label></dt>
+				<dd>{{club.city}}</dd>
+			</dl>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+	
+			<a href="#/club" class="btn btn-default">Back</a>
+			<a href="#/club/{{club._id}}/edit" class="btn btn-warning">Edit</a>
+			
+		</div>
+	</div>
+	<div class="row">
+		<h3>Members: <a class="btn btn-success" ng-click="isMembersCollapsed = !isMembersCollapsed"><span ng-if="isMembersCollapsed">Hide</span><span ng-if="!isMembersCollapsed">Show</span></a></h3>
+		<div class="col-md-10" collapse="!isMembersCollapsed">
+			<label for="searchText">Filter:</label>
+			<input placeholder="Search" id="searchText" ng-model="searchText">
+		</div>
+	</div>
+	<div class="row" collapse="!isMembersCollapsed">
+		<div class="col-md-2 text-center" ng-repeat="user in clubUsers | filter:searchText">
+			<a href="#/user/{{user._id}}">
+				<div class="">
+					<span ng-if="user.photo">
+						<img width="100" height="100" ng-src="/images/{{user.photo}}" class="img-circle" />
+					</span>
+					<span ng-if="!user.photo">
+						<span class="fa fa-user" style="font-size: 50px;"></span>
+					</span>
+				</div>
+				{{user.firstName}} {{user.lastName}}
+			</a>
+		</div>
+	</div>
+</div>
