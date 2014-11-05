@@ -41,7 +41,6 @@
                     if (userIds.indexOf(userIdsTmp[i]) === -1)
                         userIds.push(userIdsTmp[i]);
 
-                console.log(userIds);
     		    // filter out users who alread exists in reports
     		    var filteredUsers = [];
     		    for(i=0; i<$scope.users.length; i++) {
