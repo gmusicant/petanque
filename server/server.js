@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 
 // connect mongodb
 var mongoose   = require('mongoose');
-mongoose.connect('mongodb://gmusicant:pageas315@ds041150.mongolab.com:41150/petanque'); // connect to our database
+mongoose.connect('mongodb://petanque:petanquesecret@ds041150.mongolab.com:41150/petanque'); // connect to our database
 
 // use mongo models
 
