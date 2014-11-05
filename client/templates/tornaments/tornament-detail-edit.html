@@ -61,13 +61,75 @@
 	
 	<span ng-if="tornament._id != new">
 		<div class="row">
-			<div class="col-md-4">
-				<div class="form-group">
-					<h3>Tornament results</h3>
-					<button ng-click="addTornament()" class="btn btn-success">add</button>
-				</div>
+		    <h3>Tornament results: <a class="btn btn-success" ng-click="isResultsCollapsed = !isResultsCollapsed; uploadUsers();"><span ng-if="isResultsCollapsed">Hide</span><span ng-if="!isResultsCollapsed">Show</span></a></h3>
+			<div class="col-md-2" collapse="!isResultsCollapsed">
+				<label for="searchText">Select user to add:</label>
+				<angucomplete-alt id="ex1"
+					  placeholder="Add user"
+					  pause="100"
+					  selected-object="preAddUserMethod"
+					  local-data="users"
+					  search-fields="firstName"
+					  title-field="firstName"
+					  minlength="1"
+					  input-class="form-control form-control-small"/>
+			</div>
+			<div class="col-md-2" collapse="!isResultsCollapsed">
+				<label for="searchText">Filter:</label>
+				<input placeholder="Filter" id="searchText" class="form-control" ng-model="searchText">
 			</div>
 		</div>
+		<h3 ng-if="tornamentResult.users">Team</h3>
+		<ul class="list-group">
+		    <li class="list-group-item" ng-repeat="tornamentResultUser2 in tornamentResult.users">
+		        {{tornamentResultUser2.firstName}} {{tornamentResultUser2.lastName}}<br/>
+		    </li>
+		</ul>
+		<div class="row" collapse="!isResultsCollapsed" ng-if="tornamentResult.users">
+		    <div class="col-md-4">
+		            <label for="score">Score</label>
+					<input class="form-control" id="score" placeholder="Enter score" ng-model="tornamentResult.score">
+					<label for="prize">Prize</label>
+					<input class="form-control" id="prize" placeholder="Enter prize" ng-model="tornamentResult.prize">
+		    </div>
+	    </div>
+		<div class="row" ng-if="tornamentResult.users">
+		    <div class="col-md-4" collapse="!isResultsCollapsed">
+		        
+		        <button ng-click="clearResult()" class="btn btn-default">Cancel</button>    
+		        <button ng-click="addResult()" class="btn btn-success">Save</button>    
+		        
+		    </div>
+		</div>
+		<div class="row">
+		    <div class="col-md-6">
+    		    <table class="table">
+    			    <thead>
+    				    <tr>
+    				        <td>Team name</td>
+    				        <td>Members</td>
+    				        <td>Score</td>
+    				        <td>Prize</td>
+    				    </tr>
+    			    </thead>
+    			    <tbody ng-repeat="tornamentResult in tornamentResults">
+        			    <tr>
+                            <td>{{tornamentResult.teamName}}</td>
+                            <td class="container container-fluid">
+                                <div class="row" ng-repeat="user in tornamentResult.users">
+                                    <div class="col-md-8">
+                                        {{user.firstName}} {{user.lastName}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{tornamentResult.score}}</td>
+                            <td>{{tornamentResult.prize}}</td>
+                        </tr>
+				    </tbody>
+				</table>
+			</div>
+	    </div>
+
 	</span>
 	
 </div>

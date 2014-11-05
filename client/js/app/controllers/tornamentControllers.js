@@ -16,7 +16,7 @@
 	});
 
 
-	tornamentControllers.controller('TornamentDetailCtrl', function ($scope, $routeParams, $http, $location, $filter) {
+	tornamentControllers.controller('TornamentDetailCtrl', function ($scope, $routeParams, $http, $location, $filter, users) {
 
 		$scope.types = [
 			{type: "unknown", id: 0},
@@ -33,6 +33,57 @@
 			msg_object = JSON.parse(msg);
 			$scope.tornament.photo = msg_object.filename;
 
+		};
+		
+		$scope.uploadUsers = function () {
+		    users.list(function(data) {
+		        $scope.users = data;
+		    })
+		};
+		
+		$scope.preAddUserMethod = function (data) {
+		  
+		    if (typeof data != "undefined") {
+
+				var index = $scope.users.indexOf(data.originalObject);
+				if (index != -1) {
+
+                    if (typeof $scope.tornamentResult.users == "undefined")
+                        $scope.tornamentResult.users = [];
+                        
+					$scope.tornamentResult.users.push(data.originalObject);
+					$scope.users.splice(index, 1);
+                    
+				}
+			
+			}
+		    
+		};
+		
+		$scope.clearResult = function () {
+		    $scope.users = $scope.users.concat($scope.tornamentResult.users);
+		    $scope.tornamentResult = {};
+		};
+		
+		$scope.addResult = function () {
+		    
+		    var tornamentResult = $scope.tornamentResult;
+		    $scope.tornamentResult = {};
+		    
+		    var userIds = tornamentResult.users.map(function(a) {return a._id;});
+		    
+		    $http({
+				method: 'POST',
+				url: 'http://api.angular.com:8080/api/tornamentResult',
+				data: $.param({
+					userIds: userIds, 
+					tornamentId: tornamentId,
+					score: tornamentResult.score,
+					prize: tornamentResult.prize
+				}),
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			});
+					
 		};
 
 		$scope.tornamentDelete = function () {
@@ -83,9 +134,15 @@
 			$http.get('http://api.angular.com:8080/api/tornament/'+tornamentId).success(function(data) {
 				$scope.tornament = data;
 			});
+			
+			$http.get('http://api.angular.com:8080/api/tornamentResults/'+tornamentId).success(function(data) {
+				$scope.tornamentResults = data;
+			});
 
 		}
-
+		
+        $scope.tornamentResult = {};
+        
 		updateActiveNav();
 
 	});

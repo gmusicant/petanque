@@ -28,7 +28,7 @@ var TornamentSchema   = new Schema({
 	// winner can win
 	prize: {type: Number, default: 0},
 	results: [{
-		user: {
+		users: [{
 			firstName: String,
 			lastName: String,
 			userId: {type: String, default: ''},
@@ -38,10 +38,11 @@ var TornamentSchema   = new Schema({
 				photo: {type: String, default: ''},
 				clubId: {type: String, default: ''}
 			}
-		},
+		}],
+		teamName: String,
 		score: {type: Number, default: 0},
 		position: {type: Number, default: 0},
-		prize: {type: Number, default: 0}
+		prize: {type: Number, default: 0},
 	}],
 	createDate: {type: Date, default: Date.now},
 	updateDate: Date
