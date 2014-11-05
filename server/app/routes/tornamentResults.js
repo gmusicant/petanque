@@ -95,12 +95,15 @@ module.exports = function(app, router){
 				else {
 				    
 				    if (tornament) {
+				    	
+				    	var exteractIds = function(a){return a._id;}
+				        var wasAffected = false;
 				        
     				    for(var i = 0; i < tornament.results.length; i++) {
     				    
     				        var theSame = false;
     				        
-    				        var resultUserIds = tornament.results[i].users.map(function(a){return a._id;});
+    				        var resultUserIds = tornament.results[i].users.map(exteractIds);
     				        if (resultUserIds.length == req.body.userIds.length && resultUserIds.length) {
     				            
     				            theSame = true;
@@ -113,23 +116,27 @@ module.exports = function(app, router){
 				                if (theSame) {
 				                	
 			                    	tornament.results.splice(i, 1);
-			                    	tornament.save(function(err) {
-            					
-            						if (err)
-            							res.send(err);
-                                    else
-            						    res.json({ message: 'Tornament result created!' });
-            						    
-            						});
+			                    	wasAffected = true;
+
 				                }
     				            
     				        }
-    				            
-    				        
-    				    
+
     				    }
     				    
-				        res.json({ message: 'Tornament result removed!' });
+    				    if (wasAffected) {
+	    				    
+	    				    tornament.save(function(err) {
+	            					
+	    						if (err)
+	    							res.send(err);
+	                            else
+	    						    res.json({ message: 'Tornament result created!' });
+							    
+							});
+							
+						} else 
+    				    	res.send(400, {message: "Invalid userIds"});
 				        
 				    } else 
 				        res.send(400, {message: "Invalid tornamentId"});
