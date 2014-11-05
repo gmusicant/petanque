@@ -74,10 +74,6 @@
 					  minlength="1"
 					  input-class="form-control form-control-small"/>
 			</div>
-			<div class="col-md-2" collapse="!isResultsCollapsed">
-				<label for="searchText">Filter:</label>
-				<input placeholder="Filter" id="searchText" class="form-control" ng-model="searchText">
-			</div>
 		</div>
 		<h3 ng-if="tornamentResult.users">Team</h3>
 		<ul class="list-group">
@@ -103,17 +99,18 @@
 		</div>
 		<div class="row">
 		    <div class="col-md-6">
-    		    <table class="table">
+    		    <table class="table table-bordered">
     			    <thead>
     				    <tr>
     				        <td>Team name</td>
     				        <td>Members</td>
     				        <td>Score</td>
     				        <td>Prize</td>
+    				        <td>Action</td>
     				    </tr>
     			    </thead>
-    			    <tbody ng-repeat="tornamentResult in tornamentResults">
-        			    <tr>
+    			    <tbody>
+        			    <tr ng-repeat="tornamentResult in tornamentResults | orderBy:'score':true">
                             <td>{{tornamentResult.teamName}}</td>
                             <td class="container container-fluid">
                                 <div class="row" ng-repeat="user in tornamentResult.users">
@@ -124,6 +121,7 @@
                             </td>
                             <td>{{tornamentResult.score}}</td>
                             <td>{{tornamentResult.prize}}</td>
+                            <td><a href="" ng-click="removeResult(tornamentResult)" class="btn btn-danger">Delete</a></td>
                         </tr>
 				    </tbody>
 				</table>

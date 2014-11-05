@@ -56,8 +56,6 @@ module.exports = function(app, router){
     						res.send(err);
     					else {
     					    
-    					    console.log(users);
-    					    
     					    if (users) {
     					        
             					tornament.results.push({
@@ -85,6 +83,60 @@ module.exports = function(app, router){
 				
 			});
 			
+			
+			
+		})
+		.delete(function(req, res) {
+			    
+		    Tornament.findById(req.body.tornamentId, function(err, tornament) {
+			
+				if (err)
+					res.send(err);
+				else {
+				    
+				    if (tornament) {
+				        
+    				    for(var i = 0; i < tornament.results.length; i++) {
+    				    
+    				        var theSame = false;
+    				        
+    				        var resultUserIds = tornament.results[i].users.map(function(a){return a._id;});
+    				        if (resultUserIds.length == req.body.userIds.length && resultUserIds.length) {
+    				            
+    				            theSame = true;
+    				            for(var j = 0; j < resultUserIds.length && theSame; j++) {
+    				                if (req.body.userIds.indexOf(resultUserIds[j]+'') == -1) {
+    				                    theSame = false;
+    				                }
+    				            }
+    				                
+				                if (theSame) {
+				                	
+			                    	tornament.results.splice(i, 1);
+			                    	tornament.save(function(err) {
+            					
+            						if (err)
+            							res.send(err);
+                                    else
+            						    res.json({ message: 'Tornament result created!' });
+            						    
+            						});
+				                }
+    				            
+    				        }
+    				            
+    				        
+    				    
+    				    }
+    				    
+				        res.json({ message: 'Tornament result removed!' });
+				        
+				    } else 
+				        res.send(400, {message: "Invalid tornamentId"});
+				}
+		        
+		    });
+		    
 		});
 
 }

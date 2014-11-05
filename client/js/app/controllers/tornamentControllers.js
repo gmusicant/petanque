@@ -17,6 +17,45 @@
 
 
 	tornamentControllers.controller('TornamentDetailCtrl', function ($scope, $routeParams, $http, $location, $filter, users) {
+	    
+	    var clearUsers = function () {
+	        
+	        if (typeof $scope.tornamentResults != "undefined" && typeof $scope.users != "undefined") {
+    		    
+    		    var userIdsArrays = $scope.tornamentResults.map(function(a) {
+                    var userIds = a.users.map(function(b) {
+                        return b._id
+                    });
+                    return userIds;
+                });
+      
+                // make a flat array from array of arrays          
+                userIdsTmp = [];
+                var i = 0;
+                for(i = 0; i < userIdsArrays.length; i++)
+                    userIdsTmp = userIdsTmp.concat(userIdsArrays[i]);
+      
+                // unique array elmets
+                var userIds = [];
+                for (i=0; i<userIdsTmp.length; i++)
+                    if (userIds.indexOf(userIdsTmp[i]) === -1)
+                        userIds.push(userIdsTmp[i]);
+
+                console.log(userIds);
+    		    // filter out users who alread exists in reports
+    		    var filteredUsers = [];
+    		    for(i=0; i<$scope.users.length; i++) {
+    		        
+    		        var index = userIds.indexOf($scope.users[i]._id);
+				    if (index == -1)
+				        filteredUsers.push($scope.users[i]);
+    		        
+    		    }
+    		    $scope.users = filteredUsers;
+    		    
+		    }
+	        
+	    };
 
 		$scope.types = [
 			{type: "unknown", id: 0},
@@ -36,9 +75,14 @@
 		};
 		
 		$scope.uploadUsers = function () {
+
 		    users.list(function(data) {
+		        
 		        $scope.users = data;
-		    })
+		        clearUsers();
+		        
+		    });
+		    
 		};
 		
 		$scope.preAddUserMethod = function (data) {
@@ -83,7 +127,35 @@
 				}),
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			});
+			
+			tornamentResult.score = parseInt(tornamentResult.score);
+			$scope.tornamentResults.push(tornamentResult);
 					
+		};
+		
+		$scope.removeResult = function (tornamentResult) {
+		    
+		    if (typeof $scope.users != "undefined")
+		        $scope.users = $scope.users.concat(tornamentResult.users);
+		        
+		    var userIds = tornamentResult.users.map(function(a) {return a._id;});
+		    
+		    var index = $scope.tornamentResults.indexOf(tornamentResult);
+			if (index != -1)
+				$scope.tornamentResults.splice(index, 1);
+
+		    $http({
+				method: 'DELETE',
+				url: 'http://api.angular.com:8080/api/tornamentResult',
+				data: $.param({
+					userIds: userIds, 
+					tornamentId: tornamentId
+				}),
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			});
+			
+			clearUsers();
+		    
 		};
 
 		$scope.tornamentDelete = function () {
@@ -135,9 +207,11 @@
 				$scope.tornament = data;
 			});
 			
-			$http.get('http://api.angular.com:8080/api/tornamentResults/'+tornamentId).success(function(data) {
-				$scope.tornamentResults = data;
-			});
+			$http.get('http://api.angular.com:8080/api/tornamentResults/'+tornamentId).success(function(tornamentTmp) {
+				$scope.tornamentResults = tornamentTmp;
+			});	
+			
+			
 
 		}
 		
