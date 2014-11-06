@@ -14,7 +14,12 @@
 		updateActiveNav();
 		
 	});
-
+	
+	tornamentControllers.controller('TornamentCalendarCtrl', function () {
+		
+		updateActiveNav();
+		
+	});
 
 	tornamentControllers.controller('TornamentDetailCtrl', function ($scope, $routeParams, $http, $location, $filter, users) {
 	    

@@ -70,6 +70,10 @@
 			templateUrl: 'templates/tornaments/tornament-list.html',
 			controller: 'TornamentListCtrl'
 		}).
+		when('/tornament/calendar', {
+			templateUrl: 'templates/tornaments/tornament-calendar.html',
+			controller: 'TornamentCalendarCtrl'
+		}).
 		when('/tornament/:tornamentId', {
 			templateUrl: 'templates/tornaments/tornament-detail.html',
 			controller: 'TornamentDetailCtrl'
