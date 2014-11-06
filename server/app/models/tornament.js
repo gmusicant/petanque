@@ -44,6 +44,7 @@ var TornamentSchema   = new Schema({
 		position: {type: Number, default: 0},
 		prize: {type: Number, default: 0},
 	}],
+	googleEventId: String,
 	createDate: {type: Date, default: Date.now},
 	updateDate: Date
 });
